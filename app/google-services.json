@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "195205782770",
+    "project_id": "janta-4ba11",
+    "storage_bucket": "janta-4ba11.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195205782770:android:54023eb24f56d2715d846b",
+        "android_client_info": {
+          "package_name": "com.example.parkbook"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC65LoeTomH-c-UGlB99SKME60Vxtz3wM0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
