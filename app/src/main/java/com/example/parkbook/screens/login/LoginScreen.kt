@@ -1,4 +1,4 @@
-package com.example.parkbook.screens.Signup
+package com.example.parkbook.screens.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -16,11 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.parkbook.R
 import com.example.parkbook.components.ClickableRedirectText
 import com.example.parkbook.components.ParkTextbox
@@ -28,36 +26,44 @@ import com.example.parkbook.ui.theme.Chartreuse
 import com.example.parkbook.ui.theme.Navy
 
 @Composable
-fun SignUpScreen(navController: NavController){
-    Surface(color = MaterialTheme.colorScheme.background) {
+fun LoginScreen(navController: NavController) {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+//            val appState = rememberAppState()
+//            Scaffold {
+//                ParkBookScreen(appState)
+//            }
         Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Image(
                 painter = painterResource(id = R.drawable.parkapp_icon),
                 contentDescription = "parkbook app logo ",
-                modifier = Modifier) 
+                modifier = Modifier
+            )
+
             Text(
-                text = " Create your account",
-                style = MaterialTheme.typography.displaySmall.copy(
+                text = "Welcome",
+                style = MaterialTheme.typography.displayMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 )
             )
-            Spacer(modifier = Modifier.height(5.dp))
-            ParkTextbox("Employer")
-            Spacer(modifier = Modifier.height(2.dp))
-            ParkTextbox("First Name")
-            Spacer(modifier = Modifier.height(2.dp))
-            ParkTextbox("Last Name")
-            Spacer(modifier = Modifier.height(2.dp))
-            ParkTextbox("Email")
-            Spacer(modifier = Modifier.height(2.dp))
-            ParkTextbox("Password")
-            Spacer(modifier = Modifier.height(2.dp))
-            ParkTextbox("Confirm Password")
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Login to book a parking spot.")
+
             Spacer(modifier = Modifier.height(16.dp))
+            ParkTextbox("Email")
+
+            Spacer(modifier = Modifier.height(16.dp))
+            ParkTextbox("Password")
+
+            Spacer(modifier = Modifier.height(20.dp))
+
             ElevatedButton(
                 onClick = { /*TODO*/ },
                 colors = ButtonDefaults.elevatedButtonColors(
@@ -67,28 +73,21 @@ fun SignUpScreen(navController: NavController){
 
             ) {
 
-                Text(text = "Sign Up", fontSize = 16.sp)
+                Text(text = "Login", fontSize = 16.sp)
             }
-            Spacer(modifier = Modifier.height(16.dp))
+
+            Spacer(modifier = Modifier.height(10.dp))
+
             ClickableRedirectText(
-                labelText = "Already have an account? ",
-                linkText = "Log in",
-                navRoutes = mapOf("Log in" to "login"),
-                navController = navController
+                labelText = "Are you new here? ",
+                linkText = "Sign Up",
+                navController = navController,
+                navRoutes = mapOf("Sign Up" to "signUp")
             )
+
         }
+
+
     }
+
 }
-
-@Preview(
-    showBackground = true,
-    widthDp = 380,
-    heightDp = 800
-)
-@Composable
-fun SignUpPreview() {
-
-    SignUpScreen(navController = rememberNavController())
-}
-
-
