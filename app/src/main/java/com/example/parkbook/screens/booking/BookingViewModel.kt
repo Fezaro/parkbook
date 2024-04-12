@@ -55,8 +55,6 @@ class BookingViewModel : ViewModel() {
                 bookSpot()
             }
 
-
-            else -> {}
         }
     }
 
@@ -110,7 +108,8 @@ class BookingViewModel : ViewModel() {
             "bookingDate" to bookingUIState.value.bookingDate,
             "bookingFromTime" to bookingUIState.value.bookingFromTime,
             "bookingToTime" to bookingUIState.value.bookingToTime,
-            "bookingSpot" to bookingUIState.value.bookingSpot
+            "bookingSpot" to bookingUIState.value.bookingSpot,
+            "uid" to user?.uid,
         )
 
         user?.let {
@@ -118,9 +117,15 @@ class BookingViewModel : ViewModel() {
                 .document(it.uid)
                 .set(booking)
                 .addOnSuccessListener {
+                    scope?.launch {
+                        snackbarHostState.showSnackbar("Booking Successful")
+                    }
                     Log.d(TAG, "DocumentSnapshot successfully written!")
                 }
                 .addOnFailureListener { e ->
+                    scope?.launch {
+                        snackbarHostState.showSnackbar("Booking Failed")
+                    }
                     Log.w(TAG, "Error writing document", e)
                 }
         }

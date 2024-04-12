@@ -1,6 +1,8 @@
 package com.example.parkbook
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.tooling.preview.Preview
@@ -12,6 +14,7 @@ import com.example.parkbook.ui.theme.ParkbookTheme
 import androidx.navigation.compose.rememberNavController
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ParkBookApp() {
     val navController = rememberNavController()
@@ -23,6 +26,7 @@ fun ParkBookApp() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(
     showBackground = true,
     widthDp = 380,

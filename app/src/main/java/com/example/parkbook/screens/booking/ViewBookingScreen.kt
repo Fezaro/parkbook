@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +27,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,45 +51,6 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-//fun ViewBookingScreen(
-//    navController: NavController,
-//){
-//    val user = FirebaseAuth.getInstance().currentUser
-//
-//    Surface(
-//        modifier = Modifier.fillMaxSize(),
-//        color = MaterialTheme.colorScheme.background
-//    ) {
-//        Scaffold(
-//            topBar = {
-//                TopAppBar(
-//                    title = { Text(text = "ParkBook") },
-//                    actions = {
-//                        IconButton(onClick = {
-//                            user?.let {
-//                                FirebaseAuth.getInstance().signOut()
-//                                navController.navigate(Screen.Login.route)
-//                            }
-//                        }) {
-//                            Icon(Icons.Filled.ExitToApp, contentDescription = "Logout")
-//                        }
-//                    }
-//                )
-//            },
-//        ) { contentPadding ->
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(contentPadding),
-//                verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Text(text = "Booking View Screen")
-//            }
-//        }
-//    }
-//}
-
 fun ViewBookingScreen(
     navController: NavController,
 ){
@@ -104,7 +67,9 @@ fun ViewBookingScreen(
                 .get()
                 .addOnSuccessListener { result ->
                     val fetchedBookings = result.documents.mapNotNull { it.toObject(BookingData::class.java) }
+                    Log.d(TAG, "Fetched Bookings: $fetchedBookings")
                     bookings = fetchedBookings
+                    Log.d(TAG, "Bookings: $bookings")
                 }
                 .addOnFailureListener { exception ->
                     Log.w(TAG, "Error getting documents: ", exception)
@@ -143,69 +108,22 @@ fun ViewBookingScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                BookingsList(bookings)
+//                BookingsList(bookings)
+                if (bookings.isEmpty()) {
+                    Text("No parking Spot booked")
+                } else {
+                    BookingsList(bookings, snackbarHostState,navController )
+                }
             }
         }
     }
 }
 
-//fun ViewBookingScreen(
-//    navController: NavController,
-//){
-//    val user = FirebaseAuth.getInstance().currentUser
-//    val db = FirebaseFirestore.getInstance()
-//    var bookings by remember { mutableStateOf<List<BookingData>>(listOf()) }
-//    val TAG = "VIEW BOOKINGS"
-//
-//    LaunchedEffect(key1 = user) {
-////        Log.d()
-////        val bookings
-//        fetchBookings(user, bookings)
-//    }
-//
-//    Surface(
-//        modifier = Modifier.fillMaxSize(),
-//        color = MaterialTheme.colorScheme.background
-//    ) {
-//        Scaffold(
-//            topBar = {
-//                TopAppBar(
-//                    title = { Text(text = "ParkBook") },
-//                    actions = {
-//                        IconButton(onClick = {
-//                            user?.let {
-//                                FirebaseAuth.getInstance().signOut()
-//                                navController.navigate(Screen.Login.route)
-//                            }
-//                        }) {
-//                            Icon(Icons.Filled.ExitToApp, contentDescription = "Logout")
-//                        }
-//                    }
-//                )
-//            },
-//        ) { contentPadding ->
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(contentPadding),
-//                verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                if (bookings.isEmpty()) {
-//                    Text(text = "No bookings available")
-//                } else {
-//                    BookingsList(bookings)
-//                }
-//            }
-//        }
-//    }
-//}
-
 @Composable
-fun BookingsList(bookings: List<BookingData>, snackbarHostState: SnackbarHostState) {
+fun BookingsList(bookings: List<BookingData>, snackbarHostState: SnackbarHostState, navController: NavController) {
     LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
         items(items = bookings) { booking ->
-            BookingItem(booking, snackbarHostState)
+            BookingItem(booking, snackbarHostState, navController)
         }
     }
 }
@@ -213,9 +131,11 @@ fun BookingsList(bookings: List<BookingData>, snackbarHostState: SnackbarHostSta
 @Composable
 fun BookingItem(
     booking: BookingData,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    navController: NavController
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
     val extraPadding by animateDpAsState(
         if (expanded) 48.dp else 0.dp,
@@ -237,11 +157,7 @@ fun BookingItem(
                 .weight(1f)
                 .padding(bottom = extraPadding.coerceAtLeast(0.dp))
             ) {
-//                Text(text = "Office: ${booking.employer}")
-//                Text(text = "Booking Date: ${booking.bookingDate}")
-//                Text(text = "From: ${booking.bookingFromTime}")
-//                Text(text = "To: ${booking.bookingToTime}")
-//                Text(text = "Spot: ${booking.bookingSpot}")
+
                 Text(
                     text = "Office: ${booking.employer}",
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
@@ -274,18 +190,48 @@ fun BookingItem(
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
+
                 if (expanded) {
                     Spacer(modifier = Modifier.height(16.dp))
                     ElevatedButton(
-                        onClick = { deleteBooking(booking.uid) },
+                        onClick = { showDialog = true },
                         colors = ButtonDefaults.elevatedButtonColors(
                             containerColor = MaterialTheme.colorScheme.error,
                             contentColor = MaterialTheme.colorScheme.onError
                         )
-
                     ) {
                         Text("Delete Booking")
                     }
+                }
+
+                if (showDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showDialog = false },
+                        title = { Text("Confirm Delete") },
+                        text = { Text("Are you sure you want to delete this booking?") },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+
+                                    deleteBooking(booking.uid, snackbarHostState)
+                                    showDialog = false
+
+                                    // navigate to view bookings
+                                    navController.navigate(Screen.ViewBooking.route)
+
+                                }
+                            ) {
+                                Text("Confirm")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(
+                                onClick = { showDialog = false }
+                            ) {
+                                Text("Cancel")
+                            }
+                        }
+                    )
                 }
 
             }
@@ -297,24 +243,13 @@ fun BookingItem(
         }
     }
 }
-//fun fetchBookings(user: FirebaseUser?, bookings: List<BookingData>) {
-//
-//    val db = FirebaseFirestore.getInstance()
-//    user?.let {
-//        db.collection("PB_Booking")
-//            .whereEqualTo("uid", it.uid)
-//            .get()
-//            .addOnSuccessListener { result ->
-//                val fetchedBookings = result.documents.mapNotNull { it.toObject(BookingData::class.java) }
-//                Log.d("Fetch Bookings", "Fetched bookings: $fetchedBookings")
-//                bookings.value = fetchedBookings
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.w("Fetch Bookings", "Error getting documents: ", exception)
-//            }
-//    }
-//}
-fun deleteBooking(uid: String) {
+
+fun deleteBooking(
+    uid: String,
+    snackbarHostState: SnackbarHostState,
+
+
+){
     val db = FirebaseFirestore.getInstance()
     db.collection("PB_Booking")
         .document(uid)
@@ -332,53 +267,3 @@ fun deleteBooking(uid: String) {
             }
         }
 }
-
-//
-//@Composable
-//private fun Greetings(
-//    modifier: Modifier = Modifier,
-//    names: List<String> = List(1000) { "$it" } // here $it represents the list index)
-//) {
-//    LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
-//        items(items = names) { name ->
-//            Greeting(name = name)
-//        }
-//    }
-//}
-//
-//@Composable
-//private fun Greeting(name: String, modifier: Modifier = Modifier) {
-//
-//    var expanded by rememberSaveable { mutableStateOf(false) }
-//
-//    val extraPadding by animateDpAsState(
-//        if (expanded) 48.dp else 0.dp,
-//        animationSpec = spring(
-//            dampingRatio = Spring.DampingRatioMediumBouncy,
-//            stiffness = Spring.StiffnessLow
-//        )
-//    )
-//    Surface(
-//        color = MaterialTheme.colorScheme.primary,
-//        modifier = modifier.padding(vertical = 4.dp, horizontal = 8.dp)
-//    ) {
-//        Row(modifier = Modifier.padding(24.dp)) {
-//            Column(modifier = Modifier
-//                .weight(1f)
-//                .padding(bottom = extraPadding.coerceAtLeast(0.dp))
-//            ) {
-//                Text(text = "Hello, ")
-//                Text(text = name, style = MaterialTheme.typography.headlineMedium.copy(
-//                    fontWeight = FontWeight.ExtraBold
-//                )
-//                )
-//            }
-//            ElevatedButton(
-//                onClick = { expanded = !expanded }
-//            ) {
-//                Text(if (expanded) "Show less" else "Show more")
-//            }
-//
-//        }
-//    }
-//}
