@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -38,8 +37,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.parkbook.navigation.Screen
@@ -76,23 +77,7 @@ fun HomeScreen(
             }
         }
     }
-//    val userName = user?.email ?: "User"
-//    val fullUser = homeViewModel.user
-//    val fullUser by homeViewModel.user.observeAsState()
 
-//    // Call fetchUser when HomeScreen appears
-//    LaunchedEffect(key1 = true) {
-//        homeViewModel.fetchUser(FirebaseAuth.getInstance().currentUser?.uid ?: "")
-//    }
-//    // Get the Firebase user
-//    val firebaseUser = FirebaseAuth.getInstance().currentUser
-//
-//    // Call fetchUser when HomeScreen appears and the Firebase user is not null
-//    LaunchedEffect(key1 = firebaseUser) {
-//        firebaseUser?.let {
-//            homeViewModel.fetchUser(it.uid)
-//        }
-//    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -101,9 +86,21 @@ fun HomeScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "ParkBook") },
+                    title = {
+                        Text(
+                            text = "ParkBook",
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Bold
+                            ),
+                            modifier = Modifier.padding(start = 16.dp),
+
+                        ) },
                     actions = {
-                        Text(text = "Sign Out", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(end = 16.dp))
+                        Text(text = "Sign Out", style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = Color(0xFFE65100)
+                        ), modifier = Modifier.padding(end = 16.dp))
                         IconButton(onClick = {
                             user?.let {
                                 FirebaseAuth.getInstance().signOut()
@@ -124,16 +121,36 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Welcome, ${fetchedUser?.firstName} ${fetchedUser?.lastName}",
-                    style = MaterialTheme.typography.headlineMedium
+                    text = "Welcome: 👋\n ${fetchedUser?.firstName}" +
+                            "${fetchedUser?.lastName}\n",
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 26.sp
+                    ),
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text= "Employer: ${fetchedUser?.employer}",
-                    style = MaterialTheme.typography.bodyLarge
+                    text= "Office: ${fetchedUser?.employer}",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 24.sp
+                    )
                 )
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text =
+                            "Book your parking spot, Hassle Free!",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Thin,
+                        fontSize = 20.sp
+                    ),
+                )
+
+
+
+                Spacer(modifier = Modifier.height(28.dp))
                 BoxWithConstraints {
                     val cardSize = maxWidth / 2
                     Row(
@@ -144,7 +161,8 @@ fun HomeScreen(
                     ) {
                         Card(
                             modifier = Modifier
-                                .size(cardSize)
+                                .weight(1f)
+                                .height(cardSize)
                                 .clickable { navController.navigate(Screen.Booking.route) },
                             shape = RoundedCornerShape(16.dp),
                             elevation = CardDefaults.cardElevation(
@@ -171,7 +189,9 @@ fun HomeScreen(
                             ) {
                                 Text(
                                     text = "Book Spot",
-                                    style = MaterialTheme.typography.titleMedium,
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        fontWeight = FontWeight.Bold
+                                    ),
                                     color = Color.White,
                                     modifier = Modifier.align(Alignment.Center)
                                 )
@@ -180,7 +200,8 @@ fun HomeScreen(
                         Spacer(modifier = Modifier.width(16.dp))
                         Card(
                             modifier = Modifier
-                                .size(cardSize)
+                                .weight(1f)
+                                .height(cardSize)
                                 .clickable { navController.navigate(Screen.ViewBooking.route) },
                             shape = RoundedCornerShape(16.dp),
                             elevation = CardDefaults.cardElevation(
@@ -207,7 +228,9 @@ fun HomeScreen(
                             ) {
                                 Text(
                                     text = "View Spots",
-                                    style = MaterialTheme.typography.titleMedium,
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        fontWeight = FontWeight.Bold
+                                    ),
                                     color = Color.White,
                                     modifier = Modifier.align(Alignment.Center)
                                 )

@@ -38,8 +38,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.parkbook.data.BookingData
 import com.example.parkbook.navigation.Screen
@@ -84,8 +86,21 @@ fun ViewBookingScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "ParkBook") },
+                    title = {
+                        Text(
+                            text = "ParkBook",
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Bold
+                            ),
+                            modifier = Modifier.padding(start = 16.dp),
+
+                            ) },
                     actions = {
+                        Text(text = "Sign Out", style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = Color(0xFFE65100)
+                        ), modifier = Modifier.padding(end = 16.dp))
                         IconButton(onClick = {
                             user?.let {
                                 FirebaseAuth.getInstance().signOut()
@@ -160,7 +175,7 @@ fun BookingItem(
 
                 Text(
                     text = "Office: ${booking.employer}",
-                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Light),
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 Spacer(modifier = Modifier.height(2.dp) )
@@ -173,21 +188,30 @@ fun BookingItem(
 
                 Text(
                     text = "Booking Date: ${booking.bookingDate}",
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold,
+
+                    ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(2.dp) )
 
                 Text(
                     text = "From: ${booking.bookingFromTime}",
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold,
+
+                        ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(2.dp) )
 
                 Text(
                     text = "To: ${booking.bookingToTime}",
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold,
+
+                        ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
@@ -200,7 +224,12 @@ fun BookingItem(
                             contentColor = MaterialTheme.colorScheme.onError
                         )
                     ) {
-                        Text("Delete Booking")
+                        Text(
+                            "Delete Booking",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
                     }
                 }
 

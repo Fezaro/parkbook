@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 
@@ -115,9 +116,11 @@ fun LoginScreen(
                         loginViewModel.onEvent(LogInUIEvent.loginPasswordChanged(it))
                     })
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
                     ElevatedButton(
+                        modifier = Modifier.fillMaxWidth() // This will make the button take up the full width of its parent
+                        .height(60.dp), // This will set the height of the button to 60dp,
                         onClick = {
                             loginViewModel.onEvent(LogInUIEvent.loginButtonClicked)
                         },
@@ -128,7 +131,9 @@ fun LoginScreen(
 
                     ) {
 
-                        Text(text = "Login", fontSize = 16.sp)
+                        Text(text = "Login", fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.15.sp)
                     }
 
                     Spacer(modifier = Modifier.height(10.dp))
