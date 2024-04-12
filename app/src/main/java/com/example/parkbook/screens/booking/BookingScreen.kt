@@ -155,7 +155,10 @@ fun BookingScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Booking Screen")
+                Text(
+                    text = "Book a Parking Spot ",
+                    style = MaterialTheme.typography.headlineLarge
+                )
                 Spacer(modifier = Modifier.height(16.dp))
 //                OutlinedTextField(
 //                    value = employerSelected,
@@ -313,7 +316,9 @@ fun BookingScreen(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "Parking Date and Time")
+                Spacer(modifier = Modifier.height(16.dp))
                 DateTimePickerButton(
                     text = formattedDate,
                     icon = Icons.Default.DateRange,

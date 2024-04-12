@@ -54,6 +54,9 @@ class BookingViewModel : ViewModel() {
             is BookingUIEvent.bookingButtonClicked ->{
                 bookSpot()
             }
+
+
+            else -> {}
         }
     }
 
@@ -70,21 +73,21 @@ class BookingViewModel : ViewModel() {
 
         if (bookingUIState.value.bookingDate.isBlank()) {
             scope?.launch {
-                snackbarHostState.showSnackbar("Employer cannot be Empty.")
+                snackbarHostState.showSnackbar("Booking Date cannot be Empty.")
             }
             return
         }
 
         if (bookingUIState.value.bookingFromTime.isBlank()) {
             scope?.launch {
-                snackbarHostState.showSnackbar("Employer cannot be Empty.")
+                snackbarHostState.showSnackbar("Booking From Time cannot be Empty.")
             }
             return
         }
 
         if (bookingUIState.value.bookingToTime.isBlank()) {
             scope?.launch {
-                snackbarHostState.showSnackbar("Employer cannot be Empty.")
+                snackbarHostState.showSnackbar("Booking To cannot be Empty.")
             }
             return
         }

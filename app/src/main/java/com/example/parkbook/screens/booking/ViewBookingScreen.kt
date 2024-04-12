@@ -22,6 +22,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -41,6 +43,9 @@ import com.example.parkbook.data.BookingData
 import com.example.parkbook.navigation.Screen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,6 +95,7 @@ fun ViewBookingScreen(
     val db = FirebaseFirestore.getInstance()
     var bookings by remember { mutableStateOf<List<BookingData>>(listOf()) }
     val TAG = "--VIEW BOOKINGS--"
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = user) {
         user?.let {
@@ -126,6 +132,9 @@ fun ViewBookingScreen(
                     }
                 )
             },
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            }
         ) { contentPadding ->
             Column(
                 modifier = Modifier
@@ -193,16 +202,19 @@ fun ViewBookingScreen(
 //}
 
 @Composable
-fun BookingsList(bookings: List<BookingData>) {
+fun BookingsList(bookings: List<BookingData>, snackbarHostState: SnackbarHostState) {
     LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
         items(items = bookings) { booking ->
-            BookingItem(booking)
+            BookingItem(booking, snackbarHostState)
         }
     }
 }
 
 @Composable
-fun BookingItem(booking: BookingData) {
+fun BookingItem(
+    booking: BookingData,
+    snackbarHostState: SnackbarHostState
+) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     val extraPadding by animateDpAsState(
@@ -309,9 +321,15 @@ fun deleteBooking(uid: String) {
         .delete()
         .addOnSuccessListener {
             Log.d("Delete Booking", "DocumentSnapshot successfully deleted!")
-        }
+
+            CoroutineScope(Dispatchers.Main).launch {
+                snackbarHostState.showSnackbar("Booking deleted successfully")
+            }}
         .addOnFailureListener { e ->
             Log.w("Delete Booking", "Error deleting document", e)
+            CoroutineScope(Dispatchers.Main).launch {
+                snackbarHostState.showSnackbar("Booking deletion failed")
+            }
         }
 }
 
