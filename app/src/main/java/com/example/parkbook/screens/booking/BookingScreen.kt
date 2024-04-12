@@ -2,7 +2,6 @@ package com.example.parkbook.screens.booking
 
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,7 +36,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -454,8 +452,3 @@ fun BookingScreen(
 
 }
 
-@Composable
-fun ShowToast(message: String) {
-    val context = LocalContext.current
-    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-}

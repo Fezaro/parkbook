@@ -10,64 +10,6 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-//package screens.login
-//
-//import androidx.compose.runtime.mutableStateOf
-//import com.example.parkbook.common.snackbar.SnackbarManager
-//import dagger.hilt.android.lifecycle.HiltViewModel
-import com.example.parkbook.R.string as AppText
-//import javax.inject.Inject
-//
-//@HiltViewModel
-//class LoginViewModel @Inject constructor(
-//    private val accountService: AccountService,
-//    logService: LogService
-//) : MakeItSoViewModel(logService) {
-//    var uiState = mutableStateOf(LoginUiState())
-//        private set
-//
-//    private val email
-//        get() = uiState.value.email
-//    private val password
-//        get() = uiState.value.password
-//
-//    fun onEmailChange(newValue: String) {
-//        uiState.value = uiState.value.copy(email = newValue)
-//    }
-//
-//    fun onPasswordChange(newValue: String) {
-//        uiState.value = uiState.value.copy(password = newValue)
-//    }
-//
-//    fun onSignInClick(openAndPopUp: (String, String) -> Unit) {
-//        if (!email.isValidEmail()) {
-//            SnackbarManager.showMessage(AppText.email_error)
-//            return
-//        }
-//
-//        if (password.isBlank()) {
-//            SnackbarManager.showMessage(AppText.empty_password_error)
-//            return
-//        }
-//
-//        launchCatching {
-//            accountService.authenticate(email, password)
-//            openAndPopUp(SETTINGS_SCREEN, LOGIN_SCREEN)
-//        }
-//    }
-//
-//    fun onForgotPasswordClick() {
-//        if (!email.isValidEmail()) {
-//            SnackbarManager.showMessage(AppText.email_error)
-//            return
-//        }
-//
-//        launchCatching {
-//            accountService.sendRecoveryEmail(email)
-//            SnackbarManager.showMessage(AppText.recovery_email_sent)
-//        }
-//    }
-//}
 
 class LoginViewModel : ViewModel() {
     var snackbarHostState = SnackbarHostState()
@@ -107,14 +49,14 @@ class LoginViewModel : ViewModel() {
         // Validate the email and password
         if (!loginUIState.value.email.isValidEmail()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Invalid email")
+                snackbarHostState.showSnackbar("Invalid email")
             }
             return
         }
 
         if (loginUIState.value.password.isBlank()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Password cannot be empty")
+                snackbarHostState.showSnackbar("Password cannot be empty")
             }
 
             return
@@ -144,7 +86,7 @@ class LoginViewModel : ViewModel() {
 
                     Log.d(TAG, "signInUserfirebase Completed: failed")
                     scope?.launch {
-                        snackbarHostState?.showSnackbar("Login failed")
+                        snackbarHostState.showSnackbar("Login failed")
                     }
                 }
             }
@@ -152,7 +94,7 @@ class LoginViewModel : ViewModel() {
                 logInprogress.value = false
                 Log.d(TAG, "signInUserfirebase: failed")
                 scope?.launch {
-                    snackbarHostState?.showSnackbar("Login failed")
+                    snackbarHostState.showSnackbar("Login failed")
                 }
             }
 

@@ -62,7 +62,7 @@ class BookingViewModel : ViewModel() {
         // validation
         if (bookingUIState.value.employer.isBlank()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Employer cannot be Empty.")
+                snackbarHostState.showSnackbar("Employer cannot be Empty.")
             }
 
             return
@@ -70,21 +70,21 @@ class BookingViewModel : ViewModel() {
 
         if (bookingUIState.value.bookingDate.isBlank()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Employer cannot be Empty.")
+                snackbarHostState.showSnackbar("Employer cannot be Empty.")
             }
             return
         }
 
         if (bookingUIState.value.bookingFromTime.isBlank()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Employer cannot be Empty.")
+                snackbarHostState.showSnackbar("Employer cannot be Empty.")
             }
             return
         }
 
         if (bookingUIState.value.bookingToTime.isBlank()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Employer cannot be Empty.")
+                snackbarHostState.showSnackbar("Employer cannot be Empty.")
             }
             return
         }

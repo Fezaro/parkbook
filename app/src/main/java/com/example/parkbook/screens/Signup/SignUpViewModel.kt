@@ -79,14 +79,14 @@ class SignUpViewModel : ViewModel() {
         // validations
         if (!signUpUIState.value.email.isValidEmail()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Invalid email")
+                snackbarHostState.showSnackbar("Invalid email")
             }
             return
         }
 
         if (signUpUIState.value.password.isBlank()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Password cannot be empty")
+                snackbarHostState.showSnackbar("Password cannot be empty")
             }
 
             return
@@ -94,7 +94,7 @@ class SignUpViewModel : ViewModel() {
 
         if (signUpUIState.value.confirmPassword.isBlank()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Confirm Password cannot be empty")
+                snackbarHostState.showSnackbar("Confirm Password cannot be empty")
             }
 
             return
@@ -102,14 +102,14 @@ class SignUpViewModel : ViewModel() {
 
         if (signUpUIState.value.password != signUpUIState.value.confirmPassword) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Passwords do not match")
+                snackbarHostState.showSnackbar("Passwords do not match")
             }
 
             return
         }
         if (signUpUIState.value.employer.isBlank()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Employer cannot be empty")
+                snackbarHostState.showSnackbar("Employer cannot be empty")
             }
 
             return
@@ -117,7 +117,7 @@ class SignUpViewModel : ViewModel() {
 
         if (signUpUIState.value.firstName.isBlank()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("First Name cannot be empty")
+                snackbarHostState.showSnackbar("First Name cannot be empty")
             }
 
             return
@@ -125,7 +125,7 @@ class SignUpViewModel : ViewModel() {
 
         if (signUpUIState.value.lastName.isBlank()) {
             scope?.launch {
-                snackbarHostState?.showSnackbar("Last Name cannot be empty")
+                snackbarHostState.showSnackbar("Last Name cannot be empty")
             }
 
             return

@@ -9,13 +9,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
+
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
+
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -39,7 +37,7 @@ import com.example.parkbook.components.ParkTextbox
 import com.example.parkbook.data.LogInUIEvent
 import com.example.parkbook.ui.theme.Chartreuse
 import com.example.parkbook.ui.theme.Navy
-import kotlinx.coroutines.launch
+
 
 
 @Composable
