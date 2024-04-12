@@ -107,22 +107,7 @@ fun BookingScreen(
     val timeFromDialogState = rememberMaterialDialogState()
     val timeToDialogState = rememberMaterialDialogState()
 
-//    LaunchedEffect(key1 = Unit) {
-//        scope.launch {
-//            val db = FirebaseFirestore.getInstance()
-//            db.collection("PB_OFFICES").document("MOTOGP")
-//                .collection("parking_spots")
-//                .get()
-//                .addOnSuccessListener { result ->
-//                    val fetchedOptions = result.documents.map { it.id }
-//                    Log.d(TAG, "Document data: ${fetchedOptions}")
-//                    options = fetchedOptions
-//                }
-//                .addOnFailureListener { exception ->
-//                    Log.w(TAG, "Error getting documents: ", exception)
-//                }
-//        }
-//    }
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -160,35 +145,16 @@ fun BookingScreen(
                     style = MaterialTheme.typography.headlineLarge
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-//                OutlinedTextField(
-//                    value = employerSelected,
-//                    onValueChange = { employerSelected = it },
-//                    label = { Text("Employer") },
-//                    readOnly = true,
-//                    trailingIcon = {
-//                        IconButton(onClick = { employerDropdownExpanded = true }) {
-//                            Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-//                        }
-//                    }
-//                )
+
 
                 ExposedDropdownMenuBox(
                     expanded = employerDropdownExpanded,
                     onExpandedChange = {
                         Log.d(TAG, "Employer Dropdown Expanded")
                         employerDropdownExpanded = !employerDropdownExpanded
-//
                     }
                 ) {
-//                    TextField(
-//                        modifier = Modifier.menuAnchor(),
-//                        value = employerSelected,
-//                        onValueChange ={},
-//                        readOnly = true,
-//                        trailingIcon = {
-//                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = employerDropdownExpanded)
-//                        }
-//                    )
+
                     OutlinedTextField(
                         modifier = Modifier.menuAnchor(),
                         value = employerSelected,
@@ -197,11 +163,7 @@ fun BookingScreen(
                         },
                         label = { Text("Office") },
                         readOnly = true,
-//                    trailingIcon = {
-//                        IconButton(onClick = { employerDropdownExpanded = true }) {
-//                            Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-//                        }
-//                    }
+
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = employerDropdownExpanded)
                         }
@@ -225,29 +187,37 @@ fun BookingScreen(
                                         )
                                     )
 
-                                            scope.launch {
-                                                val db = FirebaseFirestore.getInstance()
-                                                db.collection("PB_OFFICES")
-                                                    .document(employerSelected)
-                                                    .collection("parking_spaces")
-                                                    .get()
-                                                    .addOnSuccessListener { result ->
-                                                        val fetchedOptions =
-                                                            result.documents.map { it.id }
-                                                        Log.d(
-                                                            TAG,
-                                                            "Document data: ${fetchedOptions}"
-                                                        )
-                                                        options = fetchedOptions
-                                                    }
-                                                    .addOnFailureListener { exception ->
-                                                        Log.w(
-                                                            TAG,
-                                                            "Error getting documents: ",
-                                                            exception
-                                                        )
-                                                    }
-                                            }
+                                        scope.launch {
+                                            val db = FirebaseFirestore.getInstance()
+
+                                            // Fetch all bookings
+                                            db.collection("PB_Booking")
+                                                .get()
+                                                .addOnSuccessListener { bookingResult ->
+                                                    val bookedSpots = bookingResult.documents.map { it.getString("bookingSpot") }
+
+                                                    // Fetch all parking spots
+                                                    db.collection("PB_OFFICES")
+                                                        .document(employerSelected)
+                                                        .collection("parking_spaces")
+                                                        .get()
+                                                        .addOnSuccessListener { parkingResult ->
+                                                            val allSpots = parkingResult.documents.map { it.id }
+
+                                                            // Find spots that are not booked
+                                                            val availableSpots = allSpots - bookedSpots
+
+                                                            // Now, availableSpots contains the spots that are not booked
+                                                            options = availableSpots as List<String>
+                                                        }
+                                                        .addOnFailureListener { exception ->
+                                                            Log.w(TAG, "Error getting documents: ", exception)
+                                                        }
+                                                }
+                                                .addOnFailureListener { exception ->
+                                                    Log.w(TAG, "Error getting documents: ", exception)
+                                                }
+                                        }
                                         }
 
                                 },
@@ -256,19 +226,7 @@ fun BookingScreen(
 
                     }
                 }
-//                DropdownMenu(
-//                    expanded = employerDropdownExpanded,
-//                    onDismissRequest = { employerDropdownExpanded = false }
-//                ) {
-//                    employers.forEach { employer ->
-//                        DropdownMenuItem(onClick = {
-//                            employerDropdownExpanded = false
-//                            employerSelected = employer
-//                        }) {
-//                            Text(text = employer)
-//                        }
-//                    }
-//                }
+
                 Spacer(modifier = Modifier.height(16.dp))
                 ExposedDropdownMenuBox(
                     expanded = dropdownExpanded,
