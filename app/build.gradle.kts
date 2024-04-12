@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 
 }
 
@@ -33,6 +34,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -55,6 +57,8 @@ android {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -76,9 +80,18 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     val nav_version = "2.7.7"
+    val viewmodel_version = "2.7.0"
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$viewmodel_version")
+
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.6")
+
+
+    implementation("androidx.compose.runtime:runtime:1.0.5") // replace with the latest version
+
 
 
 }
